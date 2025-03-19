@@ -1,6 +1,4 @@
-yfinance
+flask
 requests
 pandas
-lxml
 gunicorn
-uvicorn
