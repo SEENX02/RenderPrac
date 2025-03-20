@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Display Prices</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background: linear-gradient(to right, #3b3b98, #6a097d); /* Dark blueish purple gradient */
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto 0; /* Added margin-top for spacing */
+            padding: 20px;
+            background-color: #2c2c54; /* Dark background */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            text-align: center;
+        }
+        h1 {
+            color: #f5f6fa;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 1em;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 2px solid #474787;
+        }
+        th {
+            background-color: #575fcf;
+            font-weight: 700;
+        }
+        tr:nth-child(even) {
+            background-color: #40407a;
+        }
+        tr:hover {
+            background-color: #706fd3;
+        }
+        .btn {
+            position: absolute;
+            top: 20px;
+            left: 20px; /* Changed from left to right */
+            padding: 12px 25px;
+            background: linear-gradient(45deg, #007bff, #6a097d);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: background 0.3s ease-in-out, transform 0.3s ease-in-out;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+        }
+        .btn:hover {
+            background: linear-gradient(45deg, #6a097d, #007bff);
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
+        }
+    </style>
+</head>
+<body>
+<a href="/" class="btn">Back</a>
+<div class="container">
+    <h1>Stock Data</h1>
+    {{ table | safe }}
+</div>
+</body>
+</html>

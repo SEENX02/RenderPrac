@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Search</title>
+    <style>
+        body {
+            background-image: url('https://img.freepik.com/free-vector/stock-market-exchange-background-with-chart-diagram-investment_1017-44920.jpg');
+            background-size: cover;
+            background-position: center;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            width: 320px;
+            position: relative;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        label {
+            font-size: 16px;
+            color: #333;
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="date"] {
+            width: 90%;
+            max-width: 100%;
+            padding: 10px;
+            margin-bottom: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        input[type="date"] {
+            cursor: pointer;
+            background-color: #f9f9f9;
+        }
+        input[type="date"]:hover {
+            border-color: #007BFF;
+            background-color: #eef6ff;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background-color: #007BFF;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 8px;
+            transition: 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .suggestions {
+            position: absolute;
+            top: calc(100% + 5px);
+            left: 0;
+            width: 100%;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: none;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .suggestions div {
+            padding: 10px;
+            cursor: pointer;
+        }
+        .suggestions div:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        let tickers = [];
+
+            async function loadTickers() {
+    try {
+        const response = await fetch("/static/alphanumeric_tickers.csv");
+        const data = await response.text();
+        console.log("Raw CSV Data:", data); // Debugging step
+
+        tickers = data.split("\n").slice(1)  // Skip header
+            .map(row => {
+                const [symbol, name] = row.split(",").map(item => item.trim());
+                return { ticker: symbol, name: name || "" };
+            })
+            .filter(item => item.ticker !== "");
+
+        console.log("Tickers Loaded:", tickers);
+    } catch (error) {
+        console.error("Error loading CSV:", error);
+    }
+}
+
+
+            function showSuggestions(value) {
+        const suggestionsBox = document.getElementById("suggestions");
+        suggestionsBox.innerHTML = "";
+        suggestionsBox.style.display = "none";
+
+        if (value.length < 2) return; // Only suggest after 2 characters
+
+        const filteredTickers = tickers.filter(item =>
+            item.ticker.startsWith(value.toUpperCase()) || item.name.toLowerCase().includes(value.toLowerCase())
+        ).slice(0, 10);
+
+        console.log("Filtered Suggestions:", filteredTickers); // Debugging
+
+        if (filteredTickers.length > 0) {
+            suggestionsBox.style.display = "block";
+            filteredTickers.forEach(item => {
+                const div = document.createElement("div");
+                div.innerHTML = `<strong>${item.ticker}</strong> - ${item.name}`;
+                div.onclick = () => {
+                    document.getElementById("company").value = item.ticker;
+                    suggestionsBox.style.display = "none";
+                };
+                suggestionsBox.appendChild(div);
+            });
+        }
+    }
+
+        loadTickers();
+    </script>
+    <div class="container">
+        <h2>Company Search</h2>
+        <form method="post">
+            <label for="company">Company Name</label>
+            <div style="position: relative;">
+                <input type="text" id="company" name="company" placeholder="Enter company ticker" oninput="showSuggestions(this.value)" required>
+                <div id="suggestions" class="suggestions"></div>
+            </div>
+            <label for="company">From</label>
+            <input type="date" name="startDate" id="startDate" style="
+                width: 95%;
+                padding: 7px;
+                margin-bottom: 8px;
+                border: none;
+                border-radius: 10px;
+                background-color: #007BFF;
+                color: white;
+                font-size: 16px;
+                outline: none;
+                cursor: pointer;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+                transition: background 0.3s ease-in-out;
+            " required>
+
+            <label for="company">To:</label>
+            <input type="date" name="endDate" id="endDate" style="
+                width: 95%;
+                padding: 7px;
+                margin-bottom: 10px;
+                border: none;
+                border-radius: 10px;
+                background-color: #007BFF;
+                color: white;
+                font-size: 16px;
+                outline: none;
+                cursor: pointer;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+                transition: background 0.3s ease-in-out;
+            " required>
+
+            <label for="theme" style="font-weight: bold;">Select Chart Theme:</label>
+            <select name="theme" id="theme" style="
+                width: 100%;
+                padding: 7px;
+                margin-bottom: 7px; /* Added gap between dropdown and button */
+                border: none;
+                border-radius: 10px;
+                background-color: #007BFF;
+                color: white;
+                font-size: 16px;
+                outline: none;
+                cursor: pointer;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+                transition: background 0.3s ease-in-out;
+            ">
+                <option value="plotly_dark">Ploty</option>
+                <option value="ggplot2">Ggplot2</option>
+                <option value="seaborn">Seaborn</option>
+                <option value="simple_white">Simple_White</option>
+                <option value="none">None</option>
+            </select>
+            <button type="submit" formaction="candle">Candle Pattern</button>
+            <button type="submit" formaction="details">Company Stock Price</button>
+            <button type="submit" formaction="predict">Predict</button>
+        </form>
+    </div>
+    <script>
+    document.getElementById('startDate').addEventListener('mouseover', function() {
+        this.style.backgroundColor = '#0056b3';
+    });
+    document.getElementById('startDate').addEventListener('mouseout', function() {
+        this.style.backgroundColor = '#007BFF';
+    });
+
+    document.getElementById('endDate').addEventListener('mouseover', function() {
+        this.style.backgroundColor = '#0056b3';
+    });
+    document.getElementById('endDate').addEventListener('mouseout', function() {
+        this.style.backgroundColor = '#007BFF';
+    });
+    document.getElementById('theme').addEventListener('mouseover', function() {
+        this.style.backgroundColor = '#0056b3';
+    });
+    document.getElementById('theme').addEventListener('mouseout', function() {
+        this.style.backgroundColor = '#007BFF';
+    });
+    // Get Today's Date
+    const today = new Date().toISOString().split("T")[0];
+
+    // Disable Future Dates for Start Date
+    document.getElementById("startDate").setAttribute("max", today);
+
+    // Disable Future Dates for End Date
+    document.getElementById("endDate").setAttribute("max", today);
+    </script>
+</body>
+</html>

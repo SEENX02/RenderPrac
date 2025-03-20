@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Price Prediction Disclaimer</title>
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background: linear-gradient(to right, #3b3b98, #6a097d);
+            color: #ffffff;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .container {
+            max-width: 700px;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            color: #ffffff;
+        }
+        p {
+            margin: 20px 0;
+            font-size: 18px;
+        }
+        .btn {
+            padding: 12px 25px;
+            background: linear-gradient(45deg, #007bff, #6a097d);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: background 0.3s ease-in-out, transform 0.3s ease-in-out;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            cursor: pointer;
+            border: none;
+        }
+        .btn:hover {
+            background: linear-gradient(45deg, #6a097d, #007bff);
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Note: Stock Price Prediction Disclaimer!</h1>
+        <p>Stock price predictions are purely based on past data and machine learning algorithms. These predictions may not reflect the actual future performance of the stock. Please conduct proper fundamental analysis and review the company's current status before making any investment decisions.</p>
+        <form action="/processPredict" method="post">
+            <button class="btn" type="submit">Proceed to Prediction</button>
+        </form>
+    </div>
+</body>
+</html>
